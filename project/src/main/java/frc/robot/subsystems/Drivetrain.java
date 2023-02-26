@@ -36,8 +36,8 @@ public class Drivetrain extends SubsystemBase
   private final BuiltInAccelerometer accel;
 
    // declare variables here
-   private double currentAngle;
-   private double offSetAngle;
+   //private double currentAngle;
+   //private double offSetAngle;
    private boolean tilting;
   // declare electrical hardware here (PORTS)
   public static final int RIGHT_MOTOR = 2;
@@ -57,8 +57,8 @@ public class Drivetrain extends SubsystemBase
     gyro = new ADXRS450_Gyro();
     calibrateGyro();
 
-    currentAngle = 0;
-    offSetAngle = 0;
+    //currentAngle = 0;
+    //offSetAngle = 0;
     tilting = false;
 
     accel = new BuiltInAccelerometer();
@@ -66,19 +66,19 @@ public class Drivetrain extends SubsystemBase
   }
   
   public void moveMotors(double speed, double turn){
-    if(turn == 0){
+    drive.arcadeDrive(speed, turn);
+    /*if(turn == 0){
       if(gyro.getAngle()>currentAngle){
         offSetAngle = gyro.getAngle()-currentAngle;
       }else if(gyro.getAngle()<currentAngle){
         offSetAngle = currentAngle-gyro.getAngle();
       }
-      while(offSetAngle!=0&&!(Math.abs(offSetAngle)%360.0==0)){
+      if(offSetAngle!=0&&!(Math.abs(offSetAngle)%360.0==0)){
         drive.arcadeDrive(speed,turn);
       }
     }else{
       drive.arcadeDrive(0, turn);
-    }
-    
+    }*/
   }
 
   public void stopMotors(){
