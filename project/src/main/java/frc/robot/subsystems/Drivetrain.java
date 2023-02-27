@@ -1,3 +1,12 @@
+/*****************************************************
+ * Authors: Jason Wang
+ * ---------------------------------------------------
+ * Description: Contains all the basic code for controlling
+ * the robot drivetrain with joysticks.
+ * 
+*****************************************************/
+
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,14 +44,16 @@ public class Drivetrain extends SubsystemBase
   private ADXRS450_Gyro gyro;
   private final BuiltInAccelerometer accel;
 
-   // declare variables here
-   //private double currentAngle;
-   //private double offSetAngle;
-   private boolean tilting;
+  // declare variables here
+  //private double currentAngle;
+  //private double offSetAngle;
+  private boolean tilting;
+
+
   // declare electrical hardware here (PORTS)
   public static final int RIGHT_MOTOR = 2;
   public static final int LEFT_MOTOR = 1;
-  //ports for encoders
+  // ports for encoders
   
   // CONSTRUCTORS //
   
@@ -105,6 +116,8 @@ public class Drivetrain extends SubsystemBase
       }
     }
   }
+
+
   @Override
   public void periodic(){
     //accel.getX();
