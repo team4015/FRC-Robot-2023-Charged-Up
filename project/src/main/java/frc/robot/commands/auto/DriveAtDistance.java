@@ -42,7 +42,7 @@ public class DriveAtDistance extends CommandBase
   {
     robot.drivetrain.moveMotors(DRIVE_SPEED, 0);
   }
-
+ 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
