@@ -80,15 +80,15 @@ public class Driver
  
     public double getThrottle()
     {
-        double throttleValue = throttle.getY();
+        double throttleValue = throttle.getX();
         if(Math.abs(throttleValue) <DEADZONE) return 0;
-        throttleValue *= throttleSpeed;
+        throttleValue *= -throttleSpeed;
         return throttleValue;
     }
 
     public double getSteer()
     {
-        double steerValue = steer.getX();
+        double steerValue = steer.getY();
         if(Math.abs(steerValue)<DEADZONE) return 0;
         steerValue *= steerSpeed;
         return steerValue;
