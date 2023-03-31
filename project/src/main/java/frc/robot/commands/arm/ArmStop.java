@@ -31,14 +31,14 @@ public class ArmStop extends CommandBase
   @Override
   public void initialize()
   {
-    
+    robot.arm.stopArm(); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
   {
-    robot.arm.stop();    
+    robot.arm.stopArm();    
   }
 
   // Called once the command ends or is interrupted.

@@ -5,9 +5,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-//import edu.wpi.first.wpilibj.Timer;
-//import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser; 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.auto.startMatch.AutoScore;
+
 
 
 /**
@@ -21,7 +25,8 @@ public class Match extends TimedRobot
   //private Command m_autonomousCommand;
 
   private Robot robot;
-
+  private CommandBase auto; 
+  private SendableChooser<CommandBase> autoMode; 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -32,6 +37,11 @@ public class Match extends TimedRobot
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     robot = new Robot();
+    SmartDashboard.putData(CommandScheduler.getInstance());
+    autoMode = new SendableChooser<>();
+    autoMode.setDefaultOption("Default auto mode", new AutoScore(robot));
+    autoMode.addOption("Do nothing (Select ONLY when necessary", null);
+    SmartDashboard.putData(autoMode);
   }
 
   /**
@@ -49,6 +59,9 @@ public class Match extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    SmartDashboard.putBoolean("Has Pressure:", robot.compressor.getPressureSwitchValue());
+    SmartDashboard.putNumber("Time Remaining", Timer.getMatchTime());
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -62,8 +75,12 @@ public class Match extends TimedRobot
   @Override
   public void autonomousInit()
   {
+    SmartDashboard.putData(CommandScheduler.getInstance());
     //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    auto = autoMode.getSelected(); 
+    if(auto!= null){
+      auto.schedule();
+    }
     //// schedule the autonomous command (example)
     //if (m_autonomousCommand != null) {
     //  m_autonomousCommand.schedule();
@@ -77,6 +94,11 @@ public class Match extends TimedRobot
   @Override
   public void teleopInit()
   {
+    SmartDashboard.putData(CommandScheduler.getInstance());
+    if (auto != null) {
+      auto.cancel();
+    }
+    SmartDashboard.putString("Robot Mode:", "TeleOp");
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -84,11 +106,15 @@ public class Match extends TimedRobot
     //if (m_autonomousCommand != null) {
     //  m_autonomousCommand.cancel();
     //}
+
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    double time = Timer.getMatchTime(); 
+    if(time < 1 && time>0) robot.claw.openClaw();
+  }
 
   @Override
   public void testInit()

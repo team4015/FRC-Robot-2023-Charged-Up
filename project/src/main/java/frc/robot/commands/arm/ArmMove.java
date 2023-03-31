@@ -4,7 +4,7 @@ import frc.robot.Robot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ArmReverse extends CommandBase
+public class ArmMove extends CommandBase
 {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private Robot robot;
@@ -17,7 +17,7 @@ public class ArmReverse extends CommandBase
   
   
   
-  public ArmReverse(Robot robot)
+  public ArmMove(Robot robot)
   {
     this.robot = robot;
     addRequirements(robot.arm);
@@ -31,28 +31,28 @@ public class ArmReverse extends CommandBase
   @Override
   public void initialize()
   {
-    
+    robot.arm.stopArm(); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
-  {
-    robot.arm.reverse();
+  { 
+    //System.out.println(robot.operator.getDualshock());
+    robot.arm.moveArm(robot.operator.getDualshockArm());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
   {
-    
+    robot.arm.stopArm();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished()
   {
-    return true;
+    return false;
   }
 }
-

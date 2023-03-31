@@ -4,7 +4,7 @@ import frc.robot.Robot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ArmRetract extends CommandBase
+public class RackStop extends CommandBase
 {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private Robot robot;
@@ -17,7 +17,7 @@ public class ArmRetract extends CommandBase
   
   
   
-  public ArmRetract(Robot robot)
+  public RackStop(Robot robot)
   {
     this.robot = robot;
     addRequirements(robot.arm);
@@ -31,14 +31,14 @@ public class ArmRetract extends CommandBase
   @Override
   public void initialize()
   {
-    
+    robot.arm.stopRack(); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
   {
-    robot.arm.retract();
+    robot.arm.stopRack();    
   }
 
   // Called once the command ends or is interrupted.
@@ -52,6 +52,6 @@ public class ArmRetract extends CommandBase
   @Override
   public boolean isFinished()
   {
-    return true;
+    return false;
   }
 }

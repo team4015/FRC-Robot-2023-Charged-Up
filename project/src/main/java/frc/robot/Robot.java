@@ -1,15 +1,14 @@
-package frc.robot;
+package frc.robot; 
 
 // import subsystems here
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.arm.*;
 import frc.robot.commands.claw.*;
 
+
 import edu.wpi.first.wpilibj.Compressor;
-//import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-//import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-// import edu.wpi.first.apriltag.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.controls.*;
 import frc.robot.subsystems.*;
@@ -27,7 +26,7 @@ public class Robot
   public Drivetrain drivetrain;
   public Arm arm;
   public Claw claw; 
-  public Vision vision;
+  //public Vision vision;
   
   // declare all subsystems here
   
@@ -36,12 +35,13 @@ public class Robot
   public Robot()
   { 
     // instantiate all subsystems
+    compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     drivetrain = new Drivetrain();
     arm = new Arm();
     claw = new Claw();
-    vision = new Vision();
-
-    compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    //vision = new Vision();   
+    
+    //Instantiate Controls
     operator = new Operator(this);
     driver = new Driver(this);
 
@@ -53,11 +53,14 @@ public class Robot
 
 
   private void initialize(){
+    compressor.enableDigital();
+
     drivetrain.stopMotors();
     driver.useHighSpeed();
+    SmartDashboard.putString("Drive Speed", "HIGH SPEED");
     
-    arm.stop();
-    arm.retract();
+    arm.stopArm();
+    arm.stopRack();
 
     claw.closeClaw();
   }
@@ -65,7 +68,8 @@ public class Robot
   
   private void setDefaultCommands(){
     drivetrain.setDefaultCommand(new Drive(this));
-    arm.setDefaultCommand(new ArmStop(this));
+    arm.setDefaultCommand(new ArmExtend(this));
+    arm.setDefaultCommand(new ArmMove(this));
     claw.setDefaultCommand(new ClawClose(this));
   }
   
