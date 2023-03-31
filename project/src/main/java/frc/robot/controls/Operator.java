@@ -15,10 +15,9 @@ package frc.robot.controls;
 
 import frc.robot.Robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.*;
-import frc.robot.commands.arm.*;
 import frc.robot.commands.claw.*;
+import edu.wpi.first.wpilibj.XboxController;
 
 public class Operator
 {
@@ -32,14 +31,11 @@ public class Operator
 
     // JOYSTICKS / CONTROLLERS //
     
-    private Joystick dualshock;
+    //private PS4Controller dualshock;
+    private XboxController dualshock;
 
-    // BUTTONS //
-    private JoystickButton armIn;
-    private JoystickButton armOut; 
-    private JoystickButton extendArm; 
-    private JoystickButton retractArm; 
-    
+
+    // BUTTONS // 
     private JoystickButton clawOpen;
     private JoystickButton clawClose; 
     
@@ -50,35 +46,51 @@ public class Operator
     public static final int CLOSE_CLAW = 4;
     public static final int OPEN_CLAW = 3;
 
-    public static final int ARM_EXTEND = 8;
-    public static final int ARM_RETRACT = 7;
-    public static final int ARM_IN = 6;
-    public static final int ARM_OUT = 5;
+    public static final double DEADZONE = 0.1; 
+    public double dualshockSpeed = 1; 
 
     public Operator(Robot robot)
     {
         this.robot = robot;
         
 		// instantiate joysticks / controllers
-        dualshock = new Joystick(DUALSHOCK);
+        dualshock = new XboxController(DUALSHOCK);
         // bind button objects to physical buttons
-        armIn = new JoystickButton(dualshock, ARM_IN);
-        armOut = new JoystickButton(dualshock, ARM_OUT);
-        extendArm = new JoystickButton(dualshock, ARM_EXTEND);
-        retractArm = new JoystickButton(dualshock, ARM_RETRACT);
-       
+        //armIn = new JoystickButton(dualshock, ARM_IN);
+        //armOut = new JoystickButton(dualshock, ARM_OUT);
+
         clawOpen = new JoystickButton(dualshock, OPEN_CLAW);
         clawClose = new JoystickButton(dualshock, CLOSE_CLAW);
         // bind buttons to commands
-        armIn.whileTrue(new ArmRetract(robot));
-        armOut.whileTrue(new ArmDeploy(robot));
-        extendArm.whileTrue(new ArmExtend(robot));
-        retractArm.whileTrue(new ArmReverse(robot));
+        //armIn.whileTrue(new ArmReverse(robot));
+        //armOut.whileTrue(new ArmExtend(robot));
         
         clawOpen.whileTrue(new ClawOpen(robot));
         clawClose.whileTrue(new ClawClose(robot));
 
     }
+    public double getDualshockArm(){
+        double dualShockArmValue = dualshock.getLeftY();
+        if(Math.abs(dualShockArmValue) <DEADZONE) return 0;
+        dualShockArmValue *= dualshockSpeed;
+        //System.out.println(-dualShockValue);
+        return dualShockArmValue;
+    }
+
+    public double getDualshockRack(){
+        double dualShockRackValue = dualshock.getRightY();
+        if(Math.abs(dualShockRackValue)<DEADZONE) return 0;
+        dualShockRackValue *= dualshockSpeed; 
+        return dualShockRackValue; 
+    }
+
+    /*public double getDualshock(){
+        double dualShockValue = dualshock.getY();
+        if(Math.abs(dualShockValue) <DEADZONE) return 0;
+        dualShockValue *= dualshockSpeed;
+        //System.out.println(dualShockValue);
+        return dualShockValue;
+    }*/
        // METHODS
 
     // Add methods here which return values for various robot controls by reading the controllers.

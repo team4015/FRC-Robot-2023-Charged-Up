@@ -15,7 +15,9 @@ public class DriveAtDistance extends CommandBase
   // VARIABLES //
   private Robot robot;
   private double distance; 
-  private Accelerometer accel; 
+  private Accelerometer accel;
+  private boolean endCommand;
+ 
   
   public DriveAtDistance(Robot robot, double distance)
   {
@@ -33,6 +35,7 @@ public class DriveAtDistance extends CommandBase
   @Override
   public void initialize()
   {
+    endCommand = false;
     robot.drivetrain.stopMotors();
   }
 
@@ -47,13 +50,13 @@ public class DriveAtDistance extends CommandBase
   @Override
   public void end(boolean interrupted)
   {
-    
+    robot.drivetrain.stopMotors();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished()
   {
-    return false;
+    return endCommand;
   }
 }

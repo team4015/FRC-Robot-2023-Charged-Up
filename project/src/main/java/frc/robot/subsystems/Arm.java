@@ -2,16 +2,17 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.motorcontrol.Spark; 
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 public class Arm extends SubsystemBase
 {
   // CONSTANTS //
-  public static final double ARM_SPEED = 1;
-  public static final double ARM_REVERSE_SPEED= -1;
+  //public static final double ARM_RACK_PINION_SPEED = 1;
+  //public static final double ARM_RACK_PINION_REVERSE_SPEED= -1;
+  //public static final double ARM_EXTENSION_SPEED = 1; 
+  //public static final double ARM_RETRACT_SPEED = -1; 
+
   
   // declare constant variables here (make them private static)
   
@@ -22,20 +23,19 @@ public class Arm extends SubsystemBase
   // declare variables here
   
   // HARDWARE //
+  private PWMSparkMax rackMotor;
   private Spark armMotor;
-  private DoubleSolenoid armPiston;
   
   // declare electrical hardware here
-  public static final int ARM_PISTON_DEPLOY = 3;
-  public static final int ARM_PISTON_RETRACT = 4;
-  public static final int ARM_JAGUAR = 5; 
+  public final static int ARM_EXTENSION = 3;
+  public static final int ARM_RACK_PINION = 4; 
   
   // CONSTRUCTORS //
   
   public Arm()
   {
-    armMotor = new Spark(ARM_JAGUAR);
-    armPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,ARM_PISTON_DEPLOY,ARM_PISTON_RETRACT);
+    rackMotor = new PWMSparkMax(ARM_RACK_PINION);
+    armMotor = new Spark(ARM_EXTENSION);
     deployed = false;
     extending = false;
     // instantiate all electrical hardware and variable here  
@@ -49,38 +49,40 @@ public class Arm extends SubsystemBase
     return extending; 
   }    
 
-  public void deploy()
+  public void moveArm(double moveArmSpeed)
   {
-    armPiston.set(Value.kForward);
-    deployed=true;
+    armMotor.set(moveArmSpeed);
+    //System.out.println(moveArmSpeed);
+    if(moveArmSpeed>0){
+      deployed=true;
+    }
+    else if(moveArmSpeed<=0){
+      deployed = false; 
+    }
   }
 
-  public void retract()
-  {
-    armPiston.set(Value.kReverse);
-    deployed = false;
+  public void extendArm(double extendArmSpeed){
+    rackMotor.set(extendArmSpeed);
+    if(extendArmSpeed>0){
+      extending=true;
+    }
+    else if(extendArmSpeed<=0){
+      extending = false; 
+    }
   }
 
-  public void stop()
+  public void stopArm()
   {
     armMotor.set(0);
-    extending = false; 
-  }
-  public void extend()
-  {
-    if(deployed){
-        armMotor.set(ARM_SPEED);
-        extending = true;
-    }
+    deployed = false; 
   }
 
-  public void reverse()
+  public void stopRack()
   {
-    if(deployed)
-    {
-        armMotor.set(ARM_REVERSE_SPEED);
-    }
+    rackMotor.set(0);
+    extending = false; 
   }
+
   // METHODS //
   
   // write your subsystem methods here

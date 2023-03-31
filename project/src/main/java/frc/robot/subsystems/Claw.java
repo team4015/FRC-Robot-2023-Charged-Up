@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
 
 public class Claw extends SubsystemBase
 {
@@ -23,8 +24,8 @@ public class Claw extends SubsystemBase
   
   
   // declare electrical hardware here
-  public static final int CLAW_PISTON_DEPLOY = 1;
-  public static final int CLAW_PISTON_RETRACT = 2;
+  public static final int CLAW_PISTON_DEPLOY = 0;
+  public static final int CLAW_PISTON_RETRACT = 1;
  
   // CONSTRUCTORS //
   
@@ -38,11 +39,13 @@ public class Claw extends SubsystemBase
   {
     clawPiston.set(Value.kForward);
     closed=false;
+    SmartDashboard.putBoolean("Claw is closed:", closed);
   }
   public void closeClaw()
   {
     clawPiston.set(Value.kReverse);
     closed = true;
+    SmartDashboard.putBoolean("Claw is closed:", closed);
   }
   // METHODS //
   

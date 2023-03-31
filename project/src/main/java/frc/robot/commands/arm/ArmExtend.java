@@ -21,6 +21,7 @@ public class ArmExtend extends CommandBase
   {
     this.robot = robot;
     addRequirements(robot.arm);
+    
     // Use addRequirements() here to declare subsystem dependencies.
     
     //addRequirements(robot.mySubsystem);
@@ -30,21 +31,22 @@ public class ArmExtend extends CommandBase
   @Override
   public void initialize()
   {
-    
+    robot.arm.stopRack(); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
-  {
-    robot.arm.extend();
+  { 
+    //System.out.println(robot.operator.getDualshock());
+    robot.arm.extendArm(robot.operator.getDualshockRack());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
   {
-    
+    robot.arm.stopRack();
   }
 
   // Returns true when the command should end.
