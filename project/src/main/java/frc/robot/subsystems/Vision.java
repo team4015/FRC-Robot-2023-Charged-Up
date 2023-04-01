@@ -70,28 +70,45 @@ public class Vision extends SubsystemBase
 {
   // CONSTANTS //
   private Solenoid light; 
+  private ADXRS450_Gyro gyro;  
   private final static int LIGHT_PORT = 3;
+
+  final static int IMG_HEIGHT = 120; 
+  final static int IMG_WIDTH = 160; 
+  final static int FPS = 30; 
   
+
   Thread m_visionThread;
-  private ADXRS450_Gyro gyro;
+  private VisionThread visionThread; 
+  
+  //photonvision 
   private static boolean hasTarget; 
   private static PhotonPipelineResult result; 
   private static List<PhotonTrackedTarget> targets; 
   private static PhotonTrackedTarget target; 
   private static PhotonCamera camera;
   private static PhotonCamera cam;
+  private PhotonPoseEstimator photonPoseEstimator;
+
   private static AprilTagFieldLayout aprilTagFieldLayout; 
+
   private double CAMERA_HEIGHT_METERS; 
   private double TARGET_HEIGHT_METERS;
   private double CAMERA_PITCH_RADIANS; 
   private double TARGET_PITCH_RADIANS;
+
+  private double xCentre;
+  private double width; 
+
+  private PipelineSettings settings; 
+
   private double range; 
   private Pose2d robotPose;
   private Pose2d targetPose; 
-  private PhotonPoseEstimator photonPoseEstimator;
   private Translation2d translation;
   private Transform2d cameraToRobot; 
   private Transform3d cameraToRobot2;
+
   private int PIPELINE_INDEX;
   
   // declare constant variables here (make them private static)
@@ -108,7 +125,10 @@ public class Vision extends SubsystemBase
   
   public Vision()
   {
+    light = new Solenoid (PneumaticsModuleType.CTREPCM, LIGHT_PORT);
+    light.set(true);
 
+    
     PhotonCamera camera = new PhotonCamera("photonvision");
     PhotonCamera cam = new PhotonCamera("testCamera");
     Transform3d robotToCam = new Transform3d(new Translation3d(0.5,0.0,0.5), new Rotation3d(0,0,0));
@@ -257,7 +277,7 @@ public void resetGyro(){
             
             CvSink cvSink = CameraServer.getVideo();
             CvSource outputStream = CameraServer.putVideo(("Rectangle"), 640, 480);
-            //SmartDashboard.putStream
+            
 
             Mat mat = new Mat();
             while(!Thread.interrupted()){

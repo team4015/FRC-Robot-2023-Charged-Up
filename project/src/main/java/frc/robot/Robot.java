@@ -26,7 +26,7 @@ public class Robot
   public Drivetrain drivetrain;
   public Arm arm;
   public Claw claw; 
-  //public Vision vision;
+  public Vision vision;
   
   // declare all subsystems here
   
@@ -39,7 +39,7 @@ public class Robot
     drivetrain = new Drivetrain();
     arm = new Arm();
     claw = new Claw();
-    //vision = new Vision();   
+    vision = new Vision();   
     
     //Instantiate Controls
     operator = new Operator(this);

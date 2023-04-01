@@ -42,7 +42,7 @@ public class Drivetrain extends SubsystemBase
   private DifferentialDrive drive;
 
   private ADXRS450_Gyro gyro;
-  private final BuiltInAccelerometer accel;
+  private BuiltInAccelerometer accel;
   private Timer timer; 
   private Timer driveStraightTimer; 
 

@@ -1,14 +1,12 @@
 package frc.robot.commands.auto;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj.Timer;
-//import edu.wpi.first.wpilibj.simulation.BuiltInAccelerometerSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 
 
-public class AutoDrive extends CommandBase
+
+public class AutoTurn extends CommandBase
 {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private Robot robot;
@@ -18,27 +16,23 @@ public class AutoDrive extends CommandBase
   //private double degrees;
   //private double targetAngle; 
   private boolean endCommand; 
-  private Timer driveTimer; 
-  private BuiltInAccelerometer accel; 
-  private static final double DRIVE_TIME = 0.00002;
-  private static double distanceInFeet;  
-  public static boolean onChargingStation = false;  
-
+  private Timer turnTimer; 
+  private static final double AUTO_TURN_TIME = 0.00002;
+  private static double angleInDegrees; 
   //private static final double TURN_SPEED = 0.5;
   
   // VARIABLES //
   
   
   
-  public AutoDrive(Robot robot, double distanceInFeet)
+  public AutoTurn(Robot robot, double angleInDegrees)
   {
     this.robot = robot;
-    this.distanceInFeet = distanceInFeet;
+    this.angleInDegrees = angleInDegrees;
     //this.speed = speed;
     //this.degrees = degrees; 
-    driveTimer = new Timer();
-    driveTimer.reset(); 
-    accel = new BuiltInAccelerometer();
+    turnTimer = new Timer();
+    turnTimer.reset(); 
     addRequirements(robot.drivetrain);
 
     
@@ -53,30 +47,21 @@ public class AutoDrive extends CommandBase
   {
    //targetAngle = robot.drivetrain.getGyroAngle()+degrees;
    endCommand = false; 
-   SmartDashboard.putString("Robot Mode:", "AUTO DRIVE");
+   SmartDashboard.putString("Robot Mode:", "Auto Turn");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
   {
-    driveTimer.start();
-    double distance = Units.feetToMeters(distanceInFeet);
-    while(driveTimer.get()>=0&&driveTimer.get()<=DRIVE_TIME){
-      if(accel.getZ()!=0){
-        onChargingStation = true;
-      }
-      if(!onChargingStation){
-        robot.drivetrain.moveMotors((distance/DRIVE_TIME),0);
-      }else{
-        while(onChargingStation){
-          robot.drivetrain.moveMotors((distance/DRIVE_TIME),0);
-        }
-      }
+    turnTimer.start();
+    double turnAngle = Math.toRadians(angleInDegrees);
+    //turnAngle = Math.toRadians(angleInDegrees);
+    while(turnTimer.get()>=0&&turnTimer.get()<=AUTO_TURN_TIME){
+      robot.drivetrain.moveMotors(0,(turnAngle/AUTO_TURN_TIME)*robot.drivetrain.WHEEL_RADIUS);
     }
-    driveTimer.stop();
-    driveTimer.reset();
-
+    turnTimer.stop();
+    turnTimer.reset(); 
   }
 
   // Called once the command ends or is interrupted.
@@ -84,7 +69,7 @@ public class AutoDrive extends CommandBase
   public void end(boolean interrupted)
   {
    robot.drivetrain.stopMotors(); 
-   if (SmartDashboard.getString("Robot Mode:", "").equals("AUTO DRIVE")) {
+   if (SmartDashboard.getString("Robot Mode:", "").equals("Auto Turn")) {
     SmartDashboard.putString("Robot Mode:", "TeleOp");
   }
 
