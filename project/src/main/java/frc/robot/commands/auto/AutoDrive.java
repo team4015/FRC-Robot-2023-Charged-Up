@@ -23,7 +23,7 @@ public class AutoDrive extends CommandBase
   private static final double DRIVE_TIME = 0.00002;
   private static double distanceInFeet;  
   public static boolean onChargingStation = false;  
-
+  private static final double TILT_THRESHOLD = 1;
   //private static final double TURN_SPEED = 0.5;
   
   // VARIABLES //
@@ -62,16 +62,19 @@ public class AutoDrive extends CommandBase
   {
     driveTimer.start();
     double distance = Units.feetToMeters(distanceInFeet);
-    while(driveTimer.get()>=0&&driveTimer.get()<=DRIVE_TIME){
-      if(accel.getZ()!=0){
+    if(driveTimer.get()>=0&&driveTimer.get()<=DRIVE_TIME){
+      if(accel.getZ()>=TILT_THRESHOLD){
         onChargingStation = true;
       }
       if(!onChargingStation){
         robot.drivetrain.moveMotors((distance/DRIVE_TIME),0);
       }else{
-        while(onChargingStation){
+        if(onChargingStation){
           robot.drivetrain.moveMotors((distance/DRIVE_TIME),0);
         }
+      }
+      if(onChargingStation&&accel.getZ()<=TILT_THRESHOLD){
+        robot.drivetrain.stopMotors();
       }
     }
     driveTimer.stop();

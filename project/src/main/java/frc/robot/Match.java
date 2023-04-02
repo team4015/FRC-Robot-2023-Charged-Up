@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser; 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.auto.startMatch.AutoDriveOutOfCommunity;
 import frc.robot.commands.auto.startMatch.AutoScore;
+import frc.robot.commands.auto.AutoDriveSpeed;
 
 
 
@@ -39,9 +41,12 @@ public class Match extends TimedRobot
     robot = new Robot();
     SmartDashboard.putData(CommandScheduler.getInstance());
     autoMode = new SendableChooser<>();
-    autoMode.setDefaultOption("Default auto mode", new AutoScore(robot));
+    autoMode.setDefaultOption("Default auto mode", new AutoDriveOutOfCommunity(robot));
+    autoMode.setDefaultOption("Score and Charge", new AutoScore(robot));
     autoMode.addOption("Do nothing (Select ONLY when necessary", null);
     SmartDashboard.putData(autoMode);
+    
+    auto = new AutoDriveSpeed(robot);
   }
 
   /**
@@ -61,7 +66,6 @@ public class Match extends TimedRobot
     CommandScheduler.getInstance().run();
     SmartDashboard.putBoolean("Has Pressure:", robot.compressor.getPressureSwitchValue());
     SmartDashboard.putNumber("Time Remaining", Timer.getMatchTime());
-
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -77,14 +81,13 @@ public class Match extends TimedRobot
   {
     SmartDashboard.putData(CommandScheduler.getInstance());
     //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    auto = autoMode.getSelected(); 
-    if(auto!= null){
+
+    //if (auto != null)
+    //{
       auto.schedule();
-    }
-    //// schedule the autonomous command (example)
-    //if (m_autonomousCommand != null) {
-    //  m_autonomousCommand.schedule();
     //}
+    
+    //auto = autoMode.getSelected(); 
   }
 
   /** This function is called periodically during autonomous. */
@@ -95,9 +98,12 @@ public class Match extends TimedRobot
   public void teleopInit()
   {
     SmartDashboard.putData(CommandScheduler.getInstance());
-    if (auto != null) {
+    
+    if (auto != null)
+    {
       auto.cancel();
     }
+    
     SmartDashboard.putString("Robot Mode:", "TeleOp");
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

@@ -64,7 +64,7 @@ public class TurnAtAngle extends CommandBase
       turnAngle = Math.toRadians(-90);
     }
     //turnAngle = Math.toRadians(angleInDegrees);
-    while(turnTimer.get()>=0&&turnTimer.get()<=AUTO_TURN_TIME){
+    if(turnTimer.get()>=0&&turnTimer.get()<=AUTO_TURN_TIME){
       robot.drivetrain.moveMotors(0,(turnAngle/AUTO_TURN_TIME)*robot.drivetrain.WHEEL_RADIUS);
     }
     turnTimer.stop();
