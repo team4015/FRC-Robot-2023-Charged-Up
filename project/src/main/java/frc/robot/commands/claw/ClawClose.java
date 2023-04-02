@@ -39,6 +39,8 @@ public class ClawClose extends CommandBase
   public void execute()
   {
     robot.claw.closeClaw();
+    //    System.out.println("claw doing closing?!?!??!");
+
   }
 
   // Called once the command ends or is interrupted.

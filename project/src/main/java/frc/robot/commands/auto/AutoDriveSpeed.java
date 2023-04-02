@@ -14,7 +14,7 @@ public class AutoDriveSpeed extends CommandBase
   private Robot robot;
   
   // CONSTANTS //
-  private static double DRIVE_SPEED = 0.5;
+  private static double DRIVE_SPEED = 0.95;
 
   // VARIABLES //
   //private double distance; 

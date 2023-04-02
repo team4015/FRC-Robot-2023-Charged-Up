@@ -63,6 +63,7 @@ public class Arm extends SubsystemBase
 
   public void extendArm(double extendArmSpeed){
     rackMotor.set(extendArmSpeed);
+    //System.out.println(extendArmSpeed);
     if(extendArmSpeed>0){
       extending=true;
     }
