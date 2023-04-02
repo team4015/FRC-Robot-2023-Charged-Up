@@ -16,6 +16,7 @@ package frc.robot.controls;
 import frc.robot.Robot;
 
 import edu.wpi.first.wpilibj2.command.button.*;
+import frc.robot.commands.auto.AutoDriveSpeed;
 import frc.robot.commands.claw.*;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -38,6 +39,8 @@ public class Operator
     // BUTTONS // 
     private JoystickButton clawOpen;
     private JoystickButton clawClose; 
+
+    //public JoystickButton autoDRIVESPEED;
     
     //BUTTON BINDING//
 
@@ -45,6 +48,8 @@ public class Operator
 
     public static final int CLOSE_CLAW = 4;
     public static final int OPEN_CLAW = 3;
+
+    //public static final int AUTO_DRIVESPEED= 6;
 
     public static final double DEADZONE = 0.1; 
     public double dualshockSpeed = 1; 
@@ -68,6 +73,8 @@ public class Operator
         clawOpen.whileTrue(new ClawOpen(robot));
         clawClose.whileTrue(new ClawClose(robot));
 
+        //autoDRIVESPEED.whileTrue(new AutoDriveSpeed(robot));
+
     }
     public double getDualshockArm(){
         double dualShockArmValue = dualshock.getLeftY();
@@ -81,6 +88,7 @@ public class Operator
         double dualShockRackValue = dualshock.getRightY();
         if(Math.abs(dualShockRackValue)<DEADZONE) return 0;
         dualShockRackValue *= dualshockSpeed; 
+        //System.out.println(dualShockRackValue);
         return dualShockRackValue; 
     }
 

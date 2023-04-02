@@ -34,16 +34,18 @@ public class Claw extends SubsystemBase
     // instantiate all electrical hardware and variable here
     clawPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, CLAW_PISTON_RETRACT, CLAW_PISTON_DEPLOY);
     closed = true; 
-}
+  }
   public void openClaw()
   {
     clawPiston.set(Value.kForward);
+    //System.out.println(Value.kForward);
     closed=false;
     SmartDashboard.putBoolean("Claw is closed:", closed);
   }
   public void closeClaw()
   {
     clawPiston.set(Value.kReverse);
+    //System.out.println(Value.kReverse);
     closed = true;
     SmartDashboard.putBoolean("Claw is closed:", closed);
   }

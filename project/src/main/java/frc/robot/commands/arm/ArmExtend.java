@@ -38,7 +38,7 @@ public class ArmExtend extends CommandBase
   @Override
   public void execute()
   { 
-    //System.out.println(robot.operator.getDualshock());
+    //System.out.println(robot.operator.getDualshockRack());
     robot.arm.extendArm(robot.operator.getDualshockRack());
   }
 
