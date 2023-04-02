@@ -113,8 +113,8 @@ public class Drivetrain extends SubsystemBase
   
   public void moveMotors(double speed, double turn){
     SmartDashboard.putNumber("Gyro Rate:", gyro.getRate());
-    //drive.arcadeDrive(speed, turn);
-    if(turn == 0){
+    drive.arcadeDrive(speed, turn);
+    /*if(turn == 0){
       if(gyro.getAngle()>currentAngle){
         offSetAngle = gyro.getAngle()-currentAngle;
       }else if(gyro.getAngle()<currentAngle){
@@ -131,7 +131,7 @@ public class Drivetrain extends SubsystemBase
       }
     }else{
       drive.arcadeDrive(speed, turn);
-    }
+    }*/
   }
 
   public void stopMotors(){

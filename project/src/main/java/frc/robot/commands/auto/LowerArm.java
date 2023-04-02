@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
 
-public class AutoTurn extends CommandBase
+public class LowerArm extends CommandBase
 {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private Robot robot;
@@ -16,24 +16,25 @@ public class AutoTurn extends CommandBase
   //private double degrees;
   //private double targetAngle; 
   private boolean endCommand; 
-  private Timer turnTimer; 
-  private static final double AUTO_TURN_TIME = 0.00002;
-  private static double angleInDegrees; 
+  private Timer armTimer; 
+  private static double armSpeed; 
+  private static double time; 
   //private static final double TURN_SPEED = 0.5;
   
   // VARIABLES //
   
   
   
-  public AutoTurn(Robot robot, double angleInDegrees)
+  public LowerArm(Robot robot, double armSpeed, double time)
   {
     this.robot = robot;
-    this.angleInDegrees = angleInDegrees;
+    this.armSpeed = armSpeed;
+    this.time = time; 
     //this.speed = speed;
     //this.degrees = degrees; 
-    turnTimer = new Timer();
-    turnTimer.reset(); 
-    addRequirements(robot.drivetrain);
+    armTimer = new Timer();
+    armTimer.reset(); 
+    addRequirements(robot.arm);
 
     
     // Use addRequirements() here to declare subsystem dependencies.
@@ -47,29 +48,27 @@ public class AutoTurn extends CommandBase
   {
    //targetAngle = robot.drivetrain.getGyroAngle()+degrees;
    endCommand = false; 
-   SmartDashboard.putString("Robot Mode:", "Auto Turn");
+   SmartDashboard.putString("Robot Mode:", "Lower Arm");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
   {
-    turnTimer.start();
-    double turnAngle = Math.toRadians(angleInDegrees);
-    //turnAngle = Math.toRadians(angleInDegrees);
-    if(turnTimer.get()>=0&&turnTimer.get()<=AUTO_TURN_TIME){
-      robot.drivetrain.moveMotors(0,(turnAngle/AUTO_TURN_TIME)*robot.drivetrain.WHEEL_RADIUS);
+    armTimer.start();
+    if(armTimer.get()>=0&&armTimer.get()<=time){
+      robot.arm.moveArm(armSpeed);
     }
-    turnTimer.stop();
-    turnTimer.reset(); 
+    armTimer.stop();
+    armTimer.reset(); 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
   {
-   robot.drivetrain.stopMotors(); 
-   if (SmartDashboard.getString("Robot Mode:", "").equals("Auto Turn")) {
+   robot.arm.stopArm(); 
+   if (SmartDashboard.getString("Robot Mode:", "").equals("Lower Arm")) {
     SmartDashboard.putString("Robot Mode:", "TeleOp");
   }
 

@@ -53,7 +53,7 @@ public class Driver
     //public static final int BALANCE = 5; 
 
     public double throttleSpeed = 0.7;
-    public double steerSpeed = 0.8;
+    public double steerSpeed = 0.6;
    
 
     // CONSTRUCTOR //
